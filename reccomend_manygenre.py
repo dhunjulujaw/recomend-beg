@@ -9,16 +9,34 @@ movies = [
 
 watched_movie=["Avengers","Batman"] 
 
-user_genre=input("Enter the genre you like : ")
+user_input=input("Enter the genre you like : ")
+user_genre=user_input.split(",")
+user_genre=[genre.strip() for genre in user_genre]#
+"""" “For every genre inside user_genres,
+remove spaces using strip(),
+and collect the results into a new list.”"""
 
 recommend=[]
 
 for movie in movies:
-    if user_genre in movie["genres"] and movie['title'] not in watched_movie:
-        recommend.append(movie["title"])
+    match_count=0
+    
+    for genre in user_genre:
+        if genre in movie["genres"]:
+            match_count +=1
+    
+    if match_count>0:
+        recommend.append({
+            "title":movie["title"],
+            "score":match_count
+        })
         
-print("\nRecommendation Movies:")
+#now sorting movies wrt Score
+recommend.sort(key=lambda x: x["score"],reverse=True)
+"""key → sort using "score"
+
+reverse=True → highest score first"""
+
+print("\nRecommended Movies (Ranked):")
 for movie in recommend:
-    print("-",movie)
-else:
-    print("\nSorry, no movies found for this genre.")
+    print(f"- {movie['title']} (Match Score: {movie['score']})")
