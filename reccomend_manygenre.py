@@ -1,3 +1,10 @@
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client["movie_recommender"]
+movies_collection = db["movies"]
+
+
 movies = [
     {"id": 1, "title": "Avengers", "genres": ["Action", "Sci-Fi"]},
     {"id": 2, "title": "Iron Man", "genres": ["Action", "Sci-Fi"]},
@@ -6,6 +13,9 @@ movies = [
     {"id": 5, "title": "Notebook", "genres": ["Romance", "Drama"]},
     {"id": 6, "title": "Interstellar", "genres": ["Sci-Fi", "Drama"]}
 ]
+
+movies_collection.insert_many(movies)
+
 
 watched_movie=["Avengers","Batman"] 
 
@@ -18,7 +28,7 @@ and collect the results into a new list.”"""
 
 recommend=[]
 
-for movie in movies:
+for movie in movies_collection.find():
     match_count=0
     
     for genre in user_genre:
